@@ -1,10 +1,13 @@
 "use strict";
 const express = require("express");
-const json = require("body-parser");
+const bodyParser = require("body-parser");
 const logger = require("morgan");
 const serverless = require("serverless-http");
 
 const app = express();
+
+const router = express.Router();
+router.post("/api/v1/sessions", (req, res) => res.json({ postBody: req.body }));
 
 const apiServer = (req, res) => {
   const { email = "", password = "" } = req.body;
@@ -18,8 +21,9 @@ const apiServer = (req, res) => {
   }, 500);
 };
 
-app.use(json());
+app.use(bodyParser.json());
 app.use(logger("dev"));
+app.use("/.netlify/functions/server", router); // path must route to lambda
 
 app.use("/api/v1/sessions", apiServer);
 
