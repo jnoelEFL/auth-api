@@ -6,9 +6,6 @@ const serverless = require("serverless-http");
 
 const app = express();
 
-const router = express.Router();
-router.post("/api/v1/sessions", (req, res) => res.json({ postBody: req.body }));
-
 const apiServer = (req, res) => {
   const { email = "", password = "" } = req.body;
   setTimeout(() => {
@@ -20,6 +17,9 @@ const apiServer = (req, res) => {
     }
   }, 500);
 };
+
+const router = express.Router();
+router.post("/api/v1/sessions", apiServer);
 
 app.use(bodyParser.json());
 app.use(logger("dev"));
